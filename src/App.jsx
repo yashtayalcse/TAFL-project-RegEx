@@ -7,49 +7,46 @@ import {
   parseRegex,
   testString,
 } from './lib/regex';
+import nsutLogo from '../assets/NSUT_logo.png';
 
 const modules = [
   {
-    icon: '⌨',
+    icon: '◔',
     title: 'Regex Palette',
-    description: 'Input expressions using symbol palette',
     section: 'generate',
   },
   {
-    icon: '⚖',
+    icon: '◑',
     title: 'Equivalence Checker',
-    description: 'Compare two regex for language equality',
     section: 'validate',
   },
   {
-    icon: '≡',
+    icon: '◕',
     title: 'String Generator',
-    description: 'Generate accepted strings by length',
     section: 'generate',
   },
   {
-    icon: '◎',
+    icon: '◒',
     title: 'Automata Visualiser',
-    description: 'Render NFA / DFA diagrams visually',
     section: 'visualize',
   },
 ];
 
 const howItWorks = [
   {
-    icon: '⌨',
+    icon: '✎',
     title: 'Enter RegEx & Get Strings',
-    description: 'Use the palette to input an expression and instantly view a generated set of valid strings.',
+    description: 'Use our intuitive palette to input your expression and instantly view a generated set of valid strings.',
   },
   {
-    icon: '⚡',
+    icon: '⚖',
     title: 'Compare Two Expressions',
-    description: 'Verify whether two expressions define the same language using the built-in equivalence checker.',
+    description: 'Verify if two expressions define the same language using our built-in equivalence checker.',
   },
   {
-    icon: '◎',
+    icon: '↻',
     title: 'Generate Finite Automata',
-    description: 'Convert a regular expression into its corresponding NFA or DFA diagram.',
+    description: 'Seamlessly convert your regular expression into its corresponding NFA or DFA.',
   },
 ];
 
@@ -185,9 +182,9 @@ function App() {
 
   return (
     <>
-      <nav>
+      <nav className="bg-red-900 p-1.5 m-3">
         <div className="nav-logo">
-          RegEx <span>Visualizer</span>
+          RegEx
         </div>
         <div className="nav-links">
           <button className={`nav-link ${activeSection === 'home' ? 'active' : ''}`} type="button" onClick={() => showSection('home')}>
@@ -209,87 +206,56 @@ function App() {
       </nav>
 
       <section id="home" className={activeSection === 'home' ? 'active' : ''}>
-        <div className="hero-inner">
-          <div className="hero-badge">TAFL PROJECT · NSUT · 2024UCS1647</div>
+        <div className="landing-frame">
+          <div className="landing-glow landing-glow-top" />
+          <div className="landing-glow landing-glow-mid" />
 
-          <div className="hero-top">
-            <div className="hero-text">
-              <h1>
-                Explore
-                <br />
-                <em>Regular</em>
-                <br />
-                Expressions
-              </h1>
-              <p>A complete Theory of Automata and Formal Languages toolkit. Generate strings, validate equivalence, and visualize finite automata - all in one place.</p>
-              <div className="hero-actions">
-                <button className="btn-primary" type="button" onClick={() => showSection('generate')}>
-                  Start Exploring →
+          <div className="home-top-row">
+            <img src={nsutLogo} alt="NSUT Logo" className="home-logo" />
+            <h1 className="home-title">
+              TAFL Project Created
+              <br />
+              By
+              <br />
+              <span>Yash Tayal</span>
+              <br />
+              <span>2024UCS1647</span>
+            </h1>
+          </div>
+
+          <div className="home-modules-wrap">
+            <div className="home-modules-heading">MODULES</div>
+            <div className="home-modules-panel">
+              {modules.map((module) => (
+                <button key={module.title} type="button" className="home-module-item" onClick={() => showSection(module.section)}>
+                  <span className="home-module-icon" aria-hidden="true">
+                    {module.icon}
+                  </span>
+                  <span>{module.title}</span>
                 </button>
-                <button className="btn-ghost" type="button" onClick={() => showSection('visualize')}>
-                  View Automata
-                </button>
-              </div>
-            </div>
-
-            <div className="hero-logo-card">
-              <svg className="nsut-logo-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <circle cx="100" cy="100" r="95" stroke="#cc0000" strokeWidth="4" fill="white" />
-                <circle cx="100" cy="100" r="85" stroke="#cc0000" strokeWidth="1.5" fill="none" />
-                <ellipse cx="100" cy="100" rx="60" ry="38" stroke="#cc0000" strokeWidth="2.5" fill="none" />
-                <ellipse cx="100" cy="100" rx="60" ry="38" transform="rotate(60 100 100)" stroke="#cc0000" strokeWidth="2.5" fill="none" />
-                <ellipse cx="100" cy="100" rx="60" ry="38" transform="rotate(120 100 100)" stroke="#cc0000" strokeWidth="2.5" fill="none" />
-                <circle cx="100" cy="62" r="5" fill="#cc0000" />
-                <circle cx="134" cy="81" r="5" fill="#cc0000" />
-                <circle cx="134" cy="119" r="5" fill="#cc0000" />
-                <circle cx="100" cy="138" r="5" fill="#cc0000" />
-                <circle cx="66" cy="119" r="5" fill="#cc0000" />
-                <circle cx="66" cy="81" r="5" fill="#cc0000" />
-                <rect x="74" y="82" width="52" height="36" rx="3" fill="white" stroke="#cc0000" strokeWidth="2" />
-                <text x="100" y="105" fontFamily="Arial" fontWeight="900" fontSize="16" fill="#cc0000" textAnchor="middle">
-                  NSUT
-                </text>
-                <text x="100" y="168" fontFamily="Arial" fontSize="6.5" fill="#cc0000" textAnchor="middle">
-                  NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY
-                </text>
-                <text x="100" y="40" fontFamily="Arial" fontSize="6" fill="#cc0000" textAnchor="middle" transform="rotate(-2 100 40)">
-                  आ नो भद्रा क्रतवो यन्तु विश्वतः
-                </text>
-              </svg>
-
-              <h2>
-                TAFL Project
-                <br />
-                Created By
-                <br />
-                <strong>Yash Tayal</strong>
-              </h2>
-              <span className="roll">2024UCS1647</span>
+              ))}
             </div>
           </div>
-        </div>
 
-        <div className="modules-section">
-          <div className="section-label">Modules</div>
-          <div className="modules-grid">
-            {modules.map((module) => (
-              <button key={module.title} type="button" className="module-card" onClick={() => showSection(module.section)}>
-                <div className="module-icon">{module.icon}</div>
-                <div>
-                  <div className="module-name">{module.title}</div>
-                  <div className="module-desc">{module.description}</div>
-                </div>
-              </button>
-            ))}
+          <div className="home-explore-wrap">
+            <h2>
+              Explore
+              <br />
+              <em>Regular Expressions</em>
+            </h2>
+            <span className="home-spark">✦</span>
           </div>
-        </div>
 
-        <div className="hiw-section">
-          <div className="section-label">How It Works</div>
-          <div className="hiw-grid">
+          <div className="home-how-heading-row">
+            <span className="home-how-line">←</span>
+            <span className="home-how-heading">HOW IT WORKS</span>
+            <span className="home-how-line">→</span>
+          </div>
+
+          <div className="home-how-grid">
             {howItWorks.map((card) => (
-              <div key={card.title} className="hiw-card">
-                <div className="hiw-icon">{card.icon}</div>
+              <div key={card.title} className="home-how-card">
+                <div className="home-how-icon">{card.icon}</div>
                 <h3>{card.title}</h3>
                 <p>{card.description}</p>
               </div>
