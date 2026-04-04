@@ -356,11 +356,11 @@ function layoutPositions(stateList, width, height) {
 }
 
 function stateCircleSVG(x, y, radius, label, isStart, isAccept) {
-  let svg = `<circle cx="${x}" cy="${y}" r="${radius}" class="state-circle${isStart ? ' start' : ''}"/>`;
+  let svg = `<circle cx="${x}" cy="${y}" r="${radius}" fill="#161616" stroke="${isStart ? '#c8f135' : 'rgba(200,241,53,0.5)'}" stroke-width="${isStart ? '2.5' : '2'}"/>`;
   if (isAccept) {
     svg += `<circle cx="${x}" cy="${y}" r="${radius - 6}" fill="none" stroke="rgba(200,241,53,0.5)" stroke-width="1.5"/>`;
   }
-  svg += `<text x="${x}" y="${y}" class="state-label">${label}</text>`;
+  svg += `<text x="${x}" y="${y}" fill="#f0f0f0" font-family="Space Mono,monospace" font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="central">${label}</text>`;
   return svg;
 }
 
@@ -369,7 +369,7 @@ function startArrowSVG(x, y, radius) {
 }
 
 function selfLoopSVG(x, y, radius, label) {
-  return `<path d="M${x - 12},${y - radius} C${x - 30},${y - radius - 55} ${x + 30},${y - radius - 55} ${x + 12},${y - radius}" class="self-loop"/><text x="${x}" y="${y - radius - 30}" class="transition-label">${label}</text>`;
+  return `<path d="M${x - 12},${y - radius} C${x - 30},${y - radius - 55} ${x + 30},${y - radius - 55} ${x + 12},${y - radius}" fill="none" stroke="rgba(200,241,53,0.45)" stroke-width="1.8" marker-end="url(#arrowhead)"/><text x="${x}" y="${y - radius - 30}" fill="#c8f135" font-family="Space Mono,monospace" font-size="11" text-anchor="middle" dominant-baseline="central">${label}</text>`;
 }
 
 export function buildNfaMarkup(nfa, re) {
@@ -431,10 +431,10 @@ export function buildNfaMarkup(nfa, re) {
     const mx = (x1 + x2) / 2 + px * curve;
     const my = (y1 + y2) / 2 + py * curve;
 
-    markup += `<path d="M${x1},${y1} Q${mx},${my} ${x2},${y2}" class="transition-arrow"/>`;
+    markup += `<path d="M${x1},${y1} Q${mx},${my} ${x2},${y2}" fill="none" stroke="rgba(200,241,53,0.45)" stroke-width="1.8" marker-end="url(#arrowhead)"/>`;
     const lx = x1 * 0.2 + mx * 0.6 + x2 * 0.2;
     const ly = y1 * 0.2 + my * 0.6 + y2 * 0.2 - 9;
-    markup += `<text x="${lx}" y="${ly}" class="transition-label">${label}</text>`;
+    markup += `<text x="${lx}" y="${ly}" fill="#c8f135" font-family="Space Mono,monospace" font-size="11" text-anchor="middle" dominant-baseline="central">${label}</text>`;
     drawnPairs[pairRouteKey] = true;
   }
 
@@ -567,8 +567,8 @@ export function buildDfaMarkup(nfa, re) {
       const mx = (x1 + x2) / 2 + px * curve;
       const my = (y1 + y2) / 2 + py * curve;
 
-      markup += `<path d="M${x1},${y1} Q${mx},${my} ${x2},${y2}" class="transition-arrow"/>`;
-      markup += `<text x="${mx}" y="${my - 8}" class="transition-label">${symbol}</text>`;
+      markup += `<path d="M${x1},${y1} Q${mx},${my} ${x2},${y2}" fill="none" stroke="rgba(200,241,53,0.45)" stroke-width="1.8" marker-end="url(#arrowhead)"/>`;
+      markup += `<text x="${mx}" y="${my - 8}" fill="#c8f135" font-family="Space Mono,monospace" font-size="11" text-anchor="middle" dominant-baseline="central">${symbol}</text>`;
       drawnPairs[pairKey] = true;
     }
   }
