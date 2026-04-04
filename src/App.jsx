@@ -232,7 +232,7 @@ function App() {
       </nav>
 
       <section id="home" className={`${activeSection === 'home' ? 'flex' : 'hidden'} justify-center pb-3 pt-14 sm:pt-16`}>
-        <div className="relative min-h-[calc(100vh-22px)] w-full max-w-[1120px] origin-top overflow-hidden bg-[#050505] px-4 pb-8 pt-20 scale-[0.93] sm:px-5 sm:pb-9 sm:pt-24 sm:scale-[0.97] md:px-[70px] md:pb-12 md:pt-24 md:scale-100 xl:scale-[1.02] 2xl:scale-[1.06]">
+        <div className="relative min-h-[calc(100vh-22px)] w-full max-w-[1120px] overflow-hidden bg-[#050505] px-4 pb-8 pt-20 sm:px-5 sm:pb-9 sm:pt-24 md:px-[70px] md:pb-12 md:pt-24">
           <div className="pointer-events-none absolute left-[8%] top-[17%] h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.35)_0%,rgba(165,231,60,0.05)_60%,transparent_100%)] blur-[50px]" />
           <div className="pointer-events-none absolute bottom-[22%] left-1/2 h-[250px] w-[390px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_100%)] blur-[52px]" />
 
@@ -296,7 +296,7 @@ function App() {
       </section>
 
       <section id="generate" className={`${activeSection === 'generate' ? 'flex' : 'hidden'} min-h-screen px-2.5 pb-12 pt-24 sm:px-3 sm:pb-16 sm:pt-28 md:px-8`}>
-        <div className="mx-auto w-full max-w-5xl origin-top rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5 md:p-10 xl:scale-[1.01] 2xl:scale-[1.04]">
+        <div className="mx-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5 md:p-10">
           <div className="mb-8">
             <h2 className="text-4xl font-extrabold tracking-tight">
               String <span className="text-[#b8ef39]">Generator</span>
@@ -367,7 +367,7 @@ function App() {
       </section>
 
       <section id="validate" className={`${activeSection === 'validate' ? 'flex' : 'hidden'} min-h-screen px-2.5 pb-12 pt-24 sm:px-3 sm:pb-16 sm:pt-28 md:px-8`}>
-        <div className="mx-auto w-full max-w-5xl origin-top rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5 md:p-10 xl:scale-[1.01] 2xl:scale-[1.04]">
+        <div className="mx-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5 md:p-10">
           <div className="mb-8">
             <h2 className="text-4xl font-extrabold tracking-tight">
               Equivalence <span className="text-[#b8ef39]">Checker</span>
@@ -460,7 +460,7 @@ function App() {
       </section>
 
       <section id="visualize" className={`${activeSection === 'visualize' ? 'flex' : 'hidden'} min-h-screen px-2.5 pb-12 pt-24 sm:px-3 sm:pb-16 sm:pt-28 md:px-8`}>
-        <div className="mx-auto w-full max-w-5xl origin-top rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5 md:p-10 xl:scale-[1.01] 2xl:scale-[1.04]">
+        <div className="mx-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5 md:p-10">
           <div className="mb-8">
             <h2 className="text-4xl font-extrabold tracking-tight">
               Automata <span className="text-[#b8ef39]">Visualiser</span>
