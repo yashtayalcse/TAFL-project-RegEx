@@ -204,13 +204,13 @@ function App() {
           Reg<span className="text-[#b8ef39]">Ex</span>
         </button>
         <div className="hidden items-center gap-5 md:flex">
-          <button className={`text-[0.82rem] font-semibold ${activeSection === 'home' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('home')}>
+          <button className={`text-[0.98rem] font-semibold ${activeSection === 'home' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('home')}>
             Home
           </button>
-          <button className={`text-[0.82rem] font-semibold ${activeSection === 'generate' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('generate')}>
+          <button className={`text-[0.98rem] font-semibold ${activeSection === 'generate' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('generate')}>
             String Generator
           </button>
-          <button className={`text-[0.82rem] font-semibold ${activeSection === 'validate' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('validate')}>
+          <button className={`text-[0.98rem] font-semibold ${activeSection === 'validate' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('validate')}>
             Equivalence Checker
           </button>
         </div>
