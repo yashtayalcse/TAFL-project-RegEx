@@ -339,12 +339,16 @@ function App() {
             {paletteValues.map((symbol) => (
               <button
                 key={symbol}
-                className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
+                className="group relative overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
                 type="button"
                 onClick={() => insertSymbol(generateInputRef, setGenerateInput, symbol)}
-                title={symbolTips[symbol]}
               >
                 {symbol}
+                {symbolTips[symbol] ? (
+                  <span className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-[#b8ef39]/35 bg-[#1c1c1c] px-2.5 py-1 text-[0.63rem] uppercase tracking-[0.07em] text-[#b8ef39] group-hover:block [font-family:'Space_Mono',monospace]">
+                    {symbolTips[symbol]}
+                  </span>
+                ) : null}
               </button>
             ))}
           </div>
@@ -474,7 +478,7 @@ function App() {
             {validatorPalette.map((symbol) => (
               <button
                 key={`validator-${symbol}`}
-                className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
+                className="group relative overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
                 type="button"
                 onClick={() => {
                   if (validatorFocusRef.current === 'right') {
@@ -483,9 +487,13 @@ function App() {
                   }
                   insertSymbol(validatorInput1Ref, setValidatorInput1, symbol);
                 }}
-                title={symbolTips[symbol]}
               >
                 {symbol}
+                {symbolTips[symbol] ? (
+                  <span className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-[#b8ef39]/35 bg-[#1c1c1c] px-2.5 py-1 text-[0.63rem] uppercase tracking-[0.07em] text-[#b8ef39] group-hover:block [font-family:'Space_Mono',monospace]">
+                    {symbolTips[symbol]}
+                  </span>
+                ) : null}
               </button>
             ))}
           </div>
@@ -547,12 +555,16 @@ function App() {
             {visualizerPalette.map((symbol) => (
               <button
                 key={symbol}
-                className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
+                className="group relative overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
                 type="button"
                 onClick={() => insertSymbol(visualizerInputRef, setVisualizerInput, symbol)}
-                title={symbolTips[symbol]}
               >
                 {symbol}
+                {symbolTips[symbol] ? (
+                  <span className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-[#b8ef39]/35 bg-[#1c1c1c] px-2.5 py-1 text-[0.63rem] uppercase tracking-[0.07em] text-[#b8ef39] group-hover:block [font-family:'Space_Mono',monospace]">
+                    {symbolTips[symbol]}
+                  </span>
+                ) : null}
               </button>
             ))}
           </div>
