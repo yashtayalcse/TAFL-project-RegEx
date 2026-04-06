@@ -25,11 +25,13 @@ const howItWorks = [
     icon: '✎',
     title: 'Enter RegEx & Get Strings',
     description: 'Use our intuitive palette to input your expression and instantly view a generated set of valid strings.',
+    section: 'generate',
   },
   {
     icon: '⚖',
     title: 'Compare Two Expressions',
     description: 'Verify if two expressions define the same language using our built-in equivalence checker.',
+    section: 'validate',
   },
   // {
   //   icon: '↻',
@@ -312,7 +314,14 @@ function App() {
           <div className="relative z-10 mx-auto mt-6 grid w-full max-w-[760px] gap-7 md:mt-9 md:grid-cols-2 md:gap-10 ">
             {howItWorks.map((card) => (
               <div key={card.title} className="text-center">
-                <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-[#b8ef39] text-[1.6rem] font-bold text-black md:mb-4 md:h-[58px] md:w-[58px] md:text-[1.72rem]">{card.icon}</div>
+                <button
+                  className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-[#b8ef39] text-[1.6rem] font-bold text-black transition-transform duration-200 hover:scale-110 active:scale-95 md:mb-4 md:h-[58px] md:w-[58px] md:text-[1.72rem]"
+                  type="button"
+                  onClick={() => showSection(card.section)}
+                  title={`Go to ${card.title}`}
+                >
+                  {card.icon}
+                </button>
                 <h3 className="mb-2 text-base font-semibold md:text-[1.38rem]">{card.title}</h3>
                 <p className="mx-auto max-w-[250px] text-xs leading-relaxed text-[#d9d9d9] md:text-[0.88rem]">{card.description}</p>
               </div>
