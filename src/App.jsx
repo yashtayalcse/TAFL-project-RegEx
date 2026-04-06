@@ -144,6 +144,17 @@ function App() {
     return value.replace(/\*/g, '﹡').replace(/\+/g, '⁺');
   }
 
+  function formatPaletteSymbol(symbol) {
+    if (symbol === '*') {
+      return <span className="relative -top-[3px]">∗</span>;
+    }
+    return <span>{symbol}</span>;
+  }
+
+  function formatQuickPickLabel(value) {
+    return value.replace(/\*/g, '﹡');
+  }
+
   function applyQuickPick(section, value) {
     if (section === 'generate') {
       setGenerateInput(formatRegexForDisplay(value));
@@ -349,11 +360,11 @@ function App() {
             {paletteValues.map((symbol) => (
               <button
                 key={symbol}
-                className="group relative overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
+                className="group relative inline-flex min-h-[42px] min-w-[42px] items-center justify-center overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold leading-none text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10 [font-family:'Space_Mono',monospace]"
                 type="button"
                 onClick={() => insertSymbol(generateInputRef, setGenerateInput, symbol)}
               >
-                {symbol}
+                {formatPaletteSymbol(symbol)}
                 {symbolTips[symbol] ? (
                   <span className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-[#b8ef39]/35 bg-[#1c1c1c] px-2.5 py-1 text-[0.63rem] uppercase tracking-[0.07em] text-[#b8ef39] group-hover:block [font-family:'Space_Mono',monospace]">
                     {symbolTips[symbol]}
@@ -372,7 +383,7 @@ function App() {
                 type="button"
                 onClick={() => applyQuickPick('generate', value)}
               >
-                {value}
+                {formatQuickPickLabel(value)}
               </button>
             ))}
           </div>
@@ -406,9 +417,6 @@ function App() {
             <div className="mt-7 overflow-hidden rounded-2xl border border-white/10 bg-[#161616]">
               <div className="flex items-center justify-between border-b border-white/10 px-5 py-3 text-[11px] uppercase tracking-[0.08em] text-[#7a7a7a] [font-family:'Space_Mono',monospace]">
                 <span>Accepted Strings</span>
-                <span className="rounded-full bg-[#b8ef39]/10 px-3 py-1 text-[10px] text-[#b8ef39]">
-                  {displayCount} strings
-                </span>
               </div>
               <div className="flex max-h-[320px] flex-wrap gap-2 overflow-y-auto px-5 py-4">
                 {visibleStrings.map((candidate, index) => (
@@ -488,7 +496,7 @@ function App() {
             {validatorPalette.map((symbol) => (
               <button
                 key={`validator-${symbol}`}
-                className="group relative overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
+                className="group relative inline-flex min-h-[42px] min-w-[42px] items-center justify-center overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold leading-none text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10 [font-family:'Space_Mono',monospace]"
                 type="button"
                 onClick={() => {
                   if (validatorFocusRef.current === 'right') {
@@ -498,7 +506,7 @@ function App() {
                   insertSymbol(validatorInput1Ref, setValidatorInput1, symbol);
                 }}
               >
-                {symbol}
+                {formatPaletteSymbol(symbol)}
                 {symbolTips[symbol] ? (
                   <span className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-[#b8ef39]/35 bg-[#1c1c1c] px-2.5 py-1 text-[0.63rem] uppercase tracking-[0.07em] text-[#b8ef39] group-hover:block [font-family:'Space_Mono',monospace]">
                     {symbolTips[symbol]}
@@ -517,7 +525,7 @@ function App() {
                 type="button"
                 onClick={() => applyQuickPick('validate', value)}
               >
-                {value}
+                {formatQuickPickLabel(value)}
               </button>
             ))}
           </div>
@@ -565,11 +573,11 @@ function App() {
             {visualizerPalette.map((symbol) => (
               <button
                 key={symbol}
-                className="group relative overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
+                className="group relative inline-flex min-h-[42px] min-w-[42px] items-center justify-center overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold leading-none text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10 [font-family:'Space_Mono',monospace]"
                 type="button"
                 onClick={() => insertSymbol(visualizerInputRef, setVisualizerInput, symbol)}
               >
-                {symbol}
+                {formatPaletteSymbol(symbol)}
                 {symbolTips[symbol] ? (
                   <span className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-[#b8ef39]/35 bg-[#1c1c1c] px-2.5 py-1 text-[0.63rem] uppercase tracking-[0.07em] text-[#b8ef39] group-hover:block [font-family:'Space_Mono',monospace]">
                     {symbolTips[symbol]}
@@ -588,7 +596,7 @@ function App() {
                 type="button"
                 onClick={() => applyQuickPick('visualize', value)}
               >
-                {value}
+                {formatQuickPickLabel(value)}
               </button>
             ))}
           </div>
