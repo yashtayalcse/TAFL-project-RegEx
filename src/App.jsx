@@ -200,21 +200,41 @@ function App() {
       <div className="pointer-events-none fixed inset-0 z-50 opacity-35" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E\")" }} />
 
       <nav className="fixed left-1/2 top-0 z-40 flex w-[min(1120px,calc(100%-20px))] -translate-x-1/2 items-center justify-between px-3 py-3 sm:px-5 md:px-10 md:py-4 bg-black">
-        <button className="text-[1.6rem] font-extrabold leading-none tracking-[-1px] sm:text-[1.9rem] md:text-[2.1rem]" type="button" onClick={() => showSection('home')}>
+        <button
+          className="text-[1.6rem] font-extrabold leading-none tracking-[-1px] transition-transform duration-200 hover:scale-[1.04] active:scale-[0.97] sm:text-[1.9rem] md:text-[2.1rem]"
+          type="button"
+          onClick={() => showSection('home')}
+        >
           Reg<span className="text-[#b8ef39]">Ex</span>
         </button>
         <div className="hidden items-center gap-5 md:flex">
-          <button className={`text-[0.98rem] font-semibold ${activeSection === 'home' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('home')}>
+          <button
+            className={`rounded-md px-1 py-1 text-[0.98rem] font-semibold transition-all duration-200 hover:scale-[1.08] active:scale-95 ${activeSection === 'home' ? 'text-[#b8ef39]' : 'text-white'}`}
+            type="button"
+            onClick={() => showSection('home')}
+          >
             Home
           </button>
-          <button className={`text-[0.98rem] font-semibold ${activeSection === 'generate' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('generate')}>
+          <button
+            className={`rounded-md px-1 py-1 text-[0.98rem] font-semibold transition-all duration-200 hover:scale-[1.08] active:scale-95 ${activeSection === 'generate' ? 'text-[#b8ef39]' : 'text-white '}`}
+            type="button"
+            onClick={() => showSection('generate')}
+          >
             String Generator
           </button>
-          <button className={`text-[0.98rem] font-semibold ${activeSection === 'validate' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('validate')}>
+          <button
+            className={`rounded-md px-1 py-1 text-[0.98rem] font-semibold transition-all duration-200 hover:scale-[1.08] active:scale-95 ${activeSection === 'validate' ? 'text-[#b8ef39]' : 'text-white '}`}
+            type="button"
+            onClick={() => showSection('validate')}
+          >
             Equivalence Checker
           </button>
         </div>
-        <button className="rounded-md bg-[#b8ef39] px-2.5 py-1.5 text-xs font-bold text-black sm:px-3 sm:py-2 sm:text-sm" type="button" onClick={() => showSection('generate')}>
+        <button
+          className="rounded-md bg-[#b8ef39] px-2.5 py-1.5 text-xs font-bold text-black transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#a8d420] hover:shadow-[0_8px_20px_rgba(184,239,57,0.28)] active:translate-y-0 active:scale-95 sm:px-3 sm:py-2 sm:text-sm"
+          type="button"
+          onClick={() => showSection('generate')}
+        >
           Get Started
         </button>
       </nav>
