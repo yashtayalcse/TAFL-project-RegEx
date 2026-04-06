@@ -5,7 +5,11 @@ function newState() {
 }
 
 export function tokenize(re) {
-  re = re.replace(/\s/g, '').replace(/ε/g, '#EPS#');
+  re = re
+    .replace(/\s/g, '')
+    .replace(/⁎|∗|﹡/g, '*')
+    .replace(/⁺|＋|﹢|˖/g, '+')
+    .replace(/ε/g, '#EPS#');
   const tokens = [];
 
   for (let i = 0; i < re.length; i++) {

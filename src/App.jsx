@@ -61,6 +61,11 @@ const symbolTips = {
   ε: 'null (epsilon)',
 };
 
+const displayOperatorMap = {
+  '*': '﹡',
+  '+': '⁺',
+};
+
 const routeToSection = {
   '/': 'home',
   '/generate': 'generate',
@@ -122,38 +127,43 @@ function App() {
     const input = ref.current;
     if (!input) return;
 
+    const displaySymbol = displayOperatorMap[symbol] || symbol;
     const start = input.selectionStart ?? input.value.length;
     const end = input.selectionEnd ?? input.value.length;
-    const nextValue = `${input.value.slice(0, start)}${symbol}${input.value.slice(end)}`;
+    const nextValue = `${input.value.slice(0, start)}${displaySymbol}${input.value.slice(end)}`;
 
     setter(nextValue);
     requestAnimationFrame(() => {
       input.focus();
-      const cursor = start + symbol.length;
+      const cursor = start + displaySymbol.length;
       input.setSelectionRange(cursor, cursor);
     });
   }
 
+  function formatRegexForDisplay(value) {
+    return value.replace(/\*/g, '﹡').replace(/\+/g, '⁺');
+  }
+
   function applyQuickPick(section, value) {
     if (section === 'generate') {
-      setGenerateInput(value);
+      setGenerateInput(formatRegexForDisplay(value));
       requestAnimationFrame(() => generateInputRef.current?.focus());
       return;
     }
 
     if (section === 'visualize') {
-      setVisualizerInput(value);
+      setVisualizerInput(formatRegexForDisplay(value));
       requestAnimationFrame(() => visualizerInputRef.current?.focus());
       return;
     }
 
     if (validatorFocusRef.current === 'right') {
-      setValidatorInput2(value);
+      setValidatorInput2(formatRegexForDisplay(value));
       requestAnimationFrame(() => validatorInput2Ref.current?.focus());
       return;
     }
 
-    setValidatorInput1(value);
+    setValidatorInput1(formatRegexForDisplay(value));
     requestAnimationFrame(() => validatorInput1Ref.current?.focus());
   }
 
@@ -379,7 +389,7 @@ function App() {
               placeholder="e.g.  (a|b)*ab  or  a*b+"
               spellCheck="false"
               value={generateInput}
-              onChange={(event) => setGenerateInput(event.target.value)}
+              onChange={(event) => setGenerateInput(formatRegexForDisplay(event.target.value))}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') runGenerator();
               }}
@@ -442,7 +452,7 @@ function App() {
                 placeholder="e.g.  (a|b)*"
                 spellCheck="false"
                 value={validatorInput1}
-                onChange={(event) => setValidatorInput1(event.target.value)}
+                onChange={(event) => setValidatorInput1(formatRegexForDisplay(event.target.value))}
                 onFocus={() => {
                   validatorFocusRef.current = 'left';
                 }}
@@ -463,7 +473,7 @@ function App() {
                 placeholder="e.g.  a*b*"
                 spellCheck="false"
                 value={validatorInput2}
-                onChange={(event) => setValidatorInput2(event.target.value)}
+                onChange={(event) => setValidatorInput2(formatRegexForDisplay(event.target.value))}
                 onFocus={() => {
                   validatorFocusRef.current = 'right';
                 }}
@@ -595,7 +605,7 @@ function App() {
               placeholder="e.g.  a(a|b)*b"
               spellCheck="false"
               value={visualizerInput}
-              onChange={(event) => setVisualizerInput(event.target.value)}
+              onChange={(event) => setVisualizerInput(formatRegexForDisplay(event.target.value))}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') runVisualizer();
               }}
