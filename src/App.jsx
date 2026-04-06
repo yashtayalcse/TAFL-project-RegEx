@@ -9,14 +9,14 @@ import nsutLogo from '../assets/NSUT_logo.png';
 
 const modules = [
   {
-    icon: '◑',
-    title: 'Equivalence Checker',
-    section: 'validate',
-  },
-  {
     icon: '◕',
     title: 'String Generator',
     section: 'generate',
+  },
+  {
+    icon: '◑',
+    title: 'Equivalence Checker',
+    section: 'validate',
   },
 ];
 
@@ -31,11 +31,11 @@ const howItWorks = [
     title: 'Compare Two Expressions',
     description: 'Verify if two expressions define the same language using our built-in equivalence checker.',
   },
-  {
-    icon: '↻',
-    title: 'Generate Finite Automata',
-    description: 'Seamlessly convert your regular expression into its corresponding NFA or DFA.',
-  },
+  // {
+  //   icon: '↻',
+  //   title: 'Generate Finite Automata',
+  //   description: 'Seamlessly convert your regular expression into its corresponding NFA or DFA.',
+  // },
 ];
 
 const paletteValues = ['a', 'b', '0', '1', '|', '*', '+', '(', ')', 'ε'];
@@ -208,10 +208,10 @@ function App() {
             Home
           </button>
           <button className={`text-[0.82rem] font-semibold ${activeSection === 'generate' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('generate')}>
-            Generate
+            String Generator
           </button>
           <button className={`text-[0.82rem] font-semibold ${activeSection === 'validate' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('validate')}>
-            Validate
+            Equivalence Checker
           </button>
         </div>
         <button className="rounded-md bg-[#b8ef39] px-2.5 py-1.5 text-xs font-bold text-black sm:px-3 sm:py-2 sm:text-sm" type="button" onClick={() => showSection('generate')}>
@@ -276,7 +276,7 @@ function App() {
 
             {/* CENTER TEXT */}
             <span className="relative shrink-0 bg-transparent px-4 text-[0.65rem] font-semibold tracking-[0.25em] text-[#b8ef39] md:text-[0.85rem] uppercase leading-none">
-              HOW IT WORKS
+              What IT DOES
             </span>
 
             {/* RIGHT SIDE: Line and Arrow */}
@@ -289,7 +289,7 @@ function App() {
             
           </div>
 
-          <div className="relative z-10 mx-auto mt-6 grid w-full max-w-[930px] gap-7 md:mt-9 md:grid-cols-3 md:gap-10 ">
+          <div className="relative z-10 mx-auto mt-6 grid w-full max-w-[760px] gap-7 md:mt-9 md:grid-cols-2 md:gap-10 ">
             {howItWorks.map((card) => (
               <div key={card.title} className="text-center">
                 <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-[#b8ef39] text-[1.6rem] font-bold text-black md:mb-4 md:h-[58px] md:w-[58px] md:text-[1.72rem]">{card.icon}</div>
