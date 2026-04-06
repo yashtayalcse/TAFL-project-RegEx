@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  buildDfaMarkup,
-  buildNfaMarkup,
   checkEquivalence,
   generateStrings,
   parseRegex,
@@ -10,11 +8,6 @@ import {
 import nsutLogo from '../assets/NSUT_logo.png';
 
 const modules = [
-  {
-    icon: '◔',
-    title: 'Regex Palette',
-    section: 'generate',
-  },
   {
     icon: '◑',
     title: 'Equivalence Checker',
@@ -24,11 +17,6 @@ const modules = [
     icon: '◕',
     title: 'String Generator',
     section: 'generate',
-  },
-  {
-    icon: '◒',
-    title: 'Automata Visualiser',
-    section: 'visualize',
   },
 ];
 
@@ -52,7 +40,6 @@ const howItWorks = [
 
 const paletteValues = ['a', 'b', '0', '1', '|', '*', '+', '(', ')', 'ε'];
 const validatorPalette = [...paletteValues];
-const visualizerPalette = [...paletteValues];
 const quickPickValues = ['(a|b)*', '(a*b*)*', '(a|b)*ab(a|b)*', '(b|ab)*', '(a|b)*a(a|b)*a(a|b)*'];
 const symbolTips = {
   '|': 'union',
@@ -70,14 +57,12 @@ const routeToSection = {
   '/': 'home',
   '/generate': 'generate',
   '/validate': 'validate',
-  '/visualize': 'visualize',
 };
 
 const sectionToRoute = {
   home: '/',
   generate: '/generate',
   validate: '/validate',
-  visualize: '/visualize',
 };
 
 function App() {
@@ -95,15 +80,9 @@ function App() {
   const [validatorError, setValidatorError] = useState('');
   const [validatorResult, setValidatorResult] = useState(null);
 
-  const [visualizerInput, setVisualizerInput] = useState('');
-  const [visualizerType, setVisualizerType] = useState('nfa');
-  const [visualizerError, setVisualizerError] = useState('');
-  const [visualizerSvg, setVisualizerSvg] = useState(null);
-
   const generateInputRef = useRef(null);
   const validatorInput1Ref = useRef(null);
   const validatorInput2Ref = useRef(null);
-  const visualizerInputRef = useRef(null);
   const validatorFocusRef = useRef('left');
 
   const pageSize = 15;
@@ -162,12 +141,6 @@ function App() {
       return;
     }
 
-    if (section === 'visualize') {
-      setVisualizerInput(formatRegexForDisplay(value));
-      requestAnimationFrame(() => visualizerInputRef.current?.focus());
-      return;
-    }
-
     if (validatorFocusRef.current === 'right') {
       setValidatorInput2(formatRegexForDisplay(value));
       requestAnimationFrame(() => validatorInput2Ref.current?.focus());
@@ -219,21 +192,6 @@ function App() {
     }
   }
 
-  function runVisualizer() {
-    const value = visualizerInput.trim();
-    setVisualizerError('');
-    setVisualizerSvg(null);
-
-    try {
-      const nfa = parseRegex(value);
-      const svg = visualizerType === 'nfa' ? buildNfaMarkup(nfa, value) : buildDfaMarkup(nfa, value);
-      setVisualizerSvg(svg);
-      showSection('visualize');
-    } catch (error) {
-      setVisualizerError(`⚠ ${error.message}`);
-    }
-  }
-
   const visibleStrings = allStrings.slice(0, displayCount);
   const hasMoreStrings = displayCount < allStrings.length;
 
@@ -254,9 +212,6 @@ function App() {
           </button>
           <button className={`text-[0.82rem] font-semibold ${activeSection === 'validate' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('validate')}>
             Validate
-          </button>
-          <button className={`text-[0.82rem] font-semibold ${activeSection === 'visualize' ? 'text-[#b8ef39]' : 'text-white'}`} type="button" onClick={() => showSection('visualize')}>
-            Visualize
           </button>
         </div>
         <button className="rounded-md bg-[#b8ef39] px-2.5 py-1.5 text-xs font-bold text-black sm:px-3 sm:py-2 sm:text-sm" type="button" onClick={() => showSection('generate')}>
@@ -287,8 +242,8 @@ function App() {
                   key={module.title}
                   type="button"
                   className={`flex min-h-[56px] items-center gap-3 px-4 py-2 text-left text-[1.05rem] font-medium text-white transition hover:bg-[#282c33] hover:text-[#b8ef39] md:min-h-[70px] md:px-8 md:text-[1.78rem] ${
-                    index < 2 ? 'border-b border-white/10' : ''
-                  } ${index % 2 === 0 ? 'md:border-r md:border-white/10' : ''}`}
+                    index === 0 ? 'border-b border-white/10 md:border-b-0 md:border-r md:border-white/10' : ''
+                  }`}
                   onClick={() => showSection(module.section)}
                 >
                   <span className="text-base text-[#cfd3de] md:text-[1.65rem]">{module.icon}</span>
@@ -560,127 +515,6 @@ function App() {
         </div>
       </section>
 
-      <section id="visualize" className={`${activeSection === 'visualize' ? 'flex' : 'hidden'} min-h-screen px-2.5 pb-12 pt-24 sm:px-3 sm:pb-16 sm:pt-28 md:px-8`}>
-        <div className="mx-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5 md:p-10">
-          <div className="mb-8">
-            <h2 className="text-4xl font-extrabold tracking-tight">
-              Automata <span className="text-[#b8ef39]">Visualiser</span>
-            </h2>
-            <p className="mt-2 text-xs text-[#7f7f7f] [font-family:'Space_Mono',monospace]">// Generate NFA or DFA diagrams from your regular expression</p>
-          </div>
-
-          <div className="mb-4 flex flex-wrap gap-2">
-            {visualizerPalette.map((symbol) => (
-              <button
-                key={symbol}
-                className="group relative inline-flex min-h-[42px] min-w-[42px] items-center justify-center overflow-visible rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold leading-none text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10 [font-family:'Space_Mono',monospace]"
-                type="button"
-                onClick={() => insertSymbol(visualizerInputRef, setVisualizerInput, symbol)}
-              >
-                {formatPaletteSymbol(symbol)}
-                {symbolTips[symbol] ? (
-                  <span className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-[#b8ef39]/35 bg-[#1c1c1c] px-2.5 py-1 text-[0.63rem] uppercase tracking-[0.07em] text-[#b8ef39] group-hover:block [font-family:'Space_Mono',monospace]">
-                    {symbolTips[symbol]}
-                  </span>
-                ) : null}
-              </button>
-            ))}
-          </div>
-
-          <p className="mb-2 text-[11px] uppercase tracking-[0.12em] text-[#878787] [font-family:'Space_Mono',monospace]">Quick Picks</p>
-          <div className="mb-5 flex flex-wrap gap-2">
-            {quickPickValues.map((value) => (
-              <button
-                key={`visualize-${value}`}
-                className="rounded-full border border-[#b8ef39]/20 bg-[#b8ef39]/8 px-3 py-1.5 text-xs text-[#9ba072] transition hover:border-[#b8ef39]/45 hover:bg-[#b8ef39]/14 hover:text-[#b8ef39] [font-family:'Space_Mono',monospace]"
-                type="button"
-                onClick={() => applyQuickPick('visualize', value)}
-              >
-                {formatQuickPickLabel(value)}
-              </button>
-            ))}
-          </div>
-
-          <div className="mb-5">
-            <label htmlFor="viz-input" className="mb-2 block text-[11px] uppercase tracking-[0.12em] text-[#878787] [font-family:'Space_Mono',monospace]">
-              Regular Expression
-            </label>
-            <input
-              id="viz-input"
-              ref={visualizerInputRef}
-              className="w-full rounded-xl border border-white/10 bg-[#161616] px-4 py-3 text-lg tracking-[0.04em] text-[#f0f0f0] outline-none transition focus:border-[#b8ef39]/40 [font-family:'Space_Mono',monospace]"
-              type="text"
-              placeholder="e.g.  a(a|b)*b"
-              spellCheck="false"
-              value={visualizerInput}
-              onChange={(event) => setVisualizerInput(formatRegexForDisplay(event.target.value))}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') runVisualizer();
-              }}
-            />
-          </div>
-
-          <div className="mb-4 flex gap-2">
-            <button
-              className={`rounded-lg border px-5 py-2 text-sm font-semibold [font-family:'Space_Mono',monospace] ${
-                visualizerType === 'nfa' ? 'border-[#b8ef39]/50 bg-[#b8ef39]/12 text-[#b8ef39]' : 'border-white/10 text-[#8d8d8d]'
-              }`}
-              type="button"
-              onClick={() => setVisualizerType('nfa')}
-            >
-              NFA
-            </button>
-            <button
-              className={`rounded-lg border px-5 py-2 text-sm font-semibold [font-family:'Space_Mono',monospace] ${
-                visualizerType === 'dfa' ? 'border-[#b8ef39]/50 bg-[#b8ef39]/12 text-[#b8ef39]' : 'border-white/10 text-[#8d8d8d]'
-              }`}
-              type="button"
-              onClick={() => setVisualizerType('dfa')}
-            >
-              DFA
-            </button>
-          </div>
-
-          {visualizerError ? <div className="mb-4 rounded-lg border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 [font-family:'Space_Mono',monospace]">{visualizerError}</div> : null}
-
-          <button className="rounded-xl bg-[#b8ef39] px-8 py-3 text-sm font-bold text-black transition hover:-translate-y-0.5 hover:bg-[#a8d420]" type="button" onClick={runVisualizer}>
-            ◎ Generate Automata
-          </button>
-
-          <div className="relative mt-7 min-h-[420px] overflow-hidden rounded-2xl border border-white/10 bg-[#161616]">
-            {visualizerSvg ? (
-              <svg id="automata-svg" xmlns="http://www.w3.org/2000/svg" viewBox={visualizerSvg.viewBox} width="100%" height={visualizerSvg.height} dangerouslySetInnerHTML={{ __html: visualizerSvg.markup }} />
-            ) : (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-[#4b4b4b]">
-                <div className="text-5xl">◎</div>
-                <p className="text-xs [font-family:'Space_Mono',monospace]">Enter a regex and click Generate Automata</p>
-              </div>
-            )}
-          </div>
-
-          <div className="mt-4 flex flex-wrap gap-5 text-[11px] text-[#7d7d7d] [font-family:'Space_Mono',monospace]">
-            <div className="flex items-center gap-2">
-              <svg width="20" height="20" aria-hidden="true">
-                <circle cx="10" cy="10" r="8" fill="none" stroke="rgba(200,241,53,0.5)" strokeWidth="2" />
-              </svg>
-              State
-            </div>
-            <div className="flex items-center gap-2">
-              <svg width="20" height="20" aria-hidden="true">
-                <circle cx="10" cy="10" r="8" fill="none" stroke="rgba(200,241,53,0.8)" strokeWidth="2.5" />
-              </svg>
-              Start State
-            </div>
-            <div className="flex items-center gap-2">
-              <svg width="20" height="20" aria-hidden="true">
-                <circle cx="10" cy="10" r="8" fill="none" stroke="rgba(200,241,53,0.5)" strokeWidth="2" />
-                <circle cx="10" cy="10" r="5" fill="none" stroke="rgba(200,241,53,0.5)" strokeWidth="1.5" />
-              </svg>
-              Accept State
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
