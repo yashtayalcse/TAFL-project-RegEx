@@ -3,10 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import {
   buildDfaMarkup,
   buildNfaMarkup,
+  checkEquivalence,
   generateStrings,
-  generateTestStrings,
   parseRegex,
-  testString,
 } from './lib/regex';
 import nsutLogo from '../assets/NSUT_logo.png';
 
@@ -51,9 +50,16 @@ const howItWorks = [
   },
 ];
 
-const paletteValues = ['a', 'b', '0', '1', '|', '*', '+', '?', '(', ')', 'ε'];
-const validatorPalette = ['a', 'b', '|', '*', '(', ')'];
-const visualizerPalette = ['a', 'b', '0', '1', '|', '*', '+', '?', '(', ')'];
+const paletteValues = ['a', 'b', '0', '1', '|', '*', '+', '(', ')', 'ε'];
+const validatorPalette = [...paletteValues];
+const visualizerPalette = [...paletteValues];
+const quickPickValues = ['(a|b)*', '(a*b*)*', '(a|b)*ab(a|b)*', '(b|ab)*', '(a|b)*a(a|b)*a(a|b)*'];
+const symbolTips = {
+  '|': 'union',
+  '*': 'kleene star',
+  '+': 'kleene plus',
+  ε: 'null (epsilon)',
+};
 
 const routeToSection = {
   '/': 'home',
@@ -93,6 +99,7 @@ function App() {
   const validatorInput1Ref = useRef(null);
   const validatorInput2Ref = useRef(null);
   const visualizerInputRef = useRef(null);
+  const validatorFocusRef = useRef('left');
 
   const pageSize = 15;
 
@@ -115,17 +122,39 @@ function App() {
     const input = ref.current;
     if (!input) return;
 
-    const realSymbol = symbol === '★' ? '*' : symbol === '＋' ? '+' : symbol;
     const start = input.selectionStart ?? input.value.length;
     const end = input.selectionEnd ?? input.value.length;
-    const nextValue = `${input.value.slice(0, start)}${realSymbol}${input.value.slice(end)}`;
+    const nextValue = `${input.value.slice(0, start)}${symbol}${input.value.slice(end)}`;
 
     setter(nextValue);
     requestAnimationFrame(() => {
       input.focus();
-      const cursor = start + realSymbol.length;
+      const cursor = start + symbol.length;
       input.setSelectionRange(cursor, cursor);
     });
+  }
+
+  function applyQuickPick(section, value) {
+    if (section === 'generate') {
+      setGenerateInput(value);
+      requestAnimationFrame(() => generateInputRef.current?.focus());
+      return;
+    }
+
+    if (section === 'visualize') {
+      setVisualizerInput(value);
+      requestAnimationFrame(() => visualizerInputRef.current?.focus());
+      return;
+    }
+
+    if (validatorFocusRef.current === 'right') {
+      setValidatorInput2(value);
+      requestAnimationFrame(() => validatorInput2Ref.current?.focus());
+      return;
+    }
+
+    setValidatorInput1(value);
+    requestAnimationFrame(() => validatorInput1Ref.current?.focus());
   }
 
   function runGenerator() {
@@ -161,25 +190,8 @@ function App() {
     }
 
     try {
-      const nfaLeft = parseRegex(left);
-      const nfaRight = parseRegex(right);
-      const leftStrings = new Set(generateStrings(nfaLeft, 100));
-      const rightStrings = new Set(generateStrings(nfaRight, 100));
-
-      const diffLeft = [...leftStrings].filter((candidate) => !rightStrings.has(candidate));
-      const diffRight = [...rightStrings].filter((candidate) => !leftStrings.has(candidate));
-
-      const mismatches = [];
-      for (const candidate of generateTestStrings(6)) {
-        const leftAccepted = testString(nfaLeft, candidate);
-        const rightAccepted = testString(nfaRight, candidate);
-        if (leftAccepted !== rightAccepted) {
-          mismatches.push({ string: candidate || 'ε', leftAccepted, rightAccepted });
-        }
-      }
-
-      const equivalent = mismatches.length === 0 && diffLeft.length === 0 && diffRight.length === 0;
-      setValidatorResult({ equivalent, left, right, mismatch: mismatches[0] || null });
+      const result = checkEquivalence(left, right);
+      setValidatorResult({ ...result, left, right });
       showSection('validate');
     } catch (error) {
       setValidatorError(`⚠ ${error.message}`);
@@ -233,8 +245,6 @@ function App() {
 
       <section id="home" className={`${activeSection === 'home' ? 'flex' : 'hidden'} justify-center pb-5 pt-14 sm:pt-16`}>
         <div className="relative min-h-[calc(100vh-22px)] w-full max-w-[1120px] overflow-hidden bg-[#050505] px-4 pb-5 pt-20 sm:px-5 sm:pb-5 sm:pt-24 md:px-[70px] md:pb-5 md:pt-24">
-          <div className="pointer-events-none absolute left-[1%] top-[0.25%] h-[450px] w-[450px] rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_70%)] blur-[30px]" />
-          {/* <div className="pointer-events-none absolute left-1/2 h-[400px] w-[490px] top-[-60%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_100%)] blur-[52px]" /> */}
 
           <div className="relative z-10 grid items-center gap-4 md:grid-cols-[320px_1fr] md:gap-12">
             <img src={nsutLogo} alt="NSUT Logo" className="mx-auto w-[165px] md:w-[245px]" />
@@ -327,8 +337,28 @@ function App() {
           <p className="mb-2 text-[11px] uppercase tracking-[0.12em] text-[#878787] [font-family:'Space_Mono',monospace]">Symbol Palette - click to insert</p>
           <div className="mb-4 flex flex-wrap gap-2">
             {paletteValues.map((symbol) => (
-              <button key={symbol} className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10" type="button" onClick={() => insertSymbol(generateInputRef, setGenerateInput, symbol)} title={`symbol ${symbol}`}>
-                {symbol === 'ε' ? 'ε' : symbol === '*' ? '★' : symbol === '+' ? '＋' : symbol}
+              <button
+                key={symbol}
+                className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
+                type="button"
+                onClick={() => insertSymbol(generateInputRef, setGenerateInput, symbol)}
+                title={symbolTips[symbol]}
+              >
+                {symbol}
+              </button>
+            ))}
+          </div>
+
+          <p className="mb-2 text-[11px] uppercase tracking-[0.12em] text-[#878787] [font-family:'Space_Mono',monospace]">Quick Picks</p>
+          <div className="mb-5 flex flex-wrap gap-2">
+            {quickPickValues.map((value) => (
+              <button
+                key={`generate-${value}`}
+                className="rounded-full border border-[#b8ef39]/20 bg-[#b8ef39]/8 px-3 py-1.5 text-xs text-[#9ba072] transition hover:border-[#b8ef39]/45 hover:bg-[#b8ef39]/14 hover:text-[#b8ef39] [font-family:'Space_Mono',monospace]"
+                type="button"
+                onClick={() => applyQuickPick('generate', value)}
+              >
+                {value}
               </button>
             ))}
           </div>
@@ -363,7 +393,7 @@ function App() {
               <div className="flex items-center justify-between border-b border-white/10 px-5 py-3 text-[11px] uppercase tracking-[0.08em] text-[#7a7a7a] [font-family:'Space_Mono',monospace]">
                 <span>Accepted Strings</span>
                 <span className="rounded-full bg-[#b8ef39]/10 px-3 py-1 text-[10px] text-[#b8ef39]">
-                  {displayCount} / {allStrings.length}
+                  {displayCount} strings
                 </span>
               </div>
               <div className="flex max-h-[320px] flex-wrap gap-2 overflow-y-auto px-5 py-4">
@@ -409,6 +439,9 @@ function App() {
                 spellCheck="false"
                 value={validatorInput1}
                 onChange={(event) => setValidatorInput1(event.target.value)}
+                onFocus={() => {
+                  validatorFocusRef.current = 'left';
+                }}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') runValidator();
                 }}
@@ -427,6 +460,9 @@ function App() {
                 spellCheck="false"
                 value={validatorInput2}
                 onChange={(event) => setValidatorInput2(event.target.value)}
+                onFocus={() => {
+                  validatorFocusRef.current = 'right';
+                }}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') runValidator();
                 }}
@@ -434,19 +470,38 @@ function App() {
             </div>
           </div>
 
+          <div className="mb-4 flex flex-wrap gap-2">
+            {validatorPalette.map((symbol) => (
+              <button
+                key={`validator-${symbol}`}
+                className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
+                type="button"
+                onClick={() => {
+                  if (validatorFocusRef.current === 'right') {
+                    insertSymbol(validatorInput2Ref, setValidatorInput2, symbol);
+                    return;
+                  }
+                  insertSymbol(validatorInput1Ref, setValidatorInput1, symbol);
+                }}
+                title={symbolTips[symbol]}
+              >
+                {symbol}
+              </button>
+            ))}
+          </div>
+
+          <p className="mb-2 text-[11px] uppercase tracking-[0.12em] text-[#878787] [font-family:'Space_Mono',monospace]">Quick Picks</p>
           <div className="mb-6 flex flex-wrap gap-2">
-            {validatorPalette.map((symbol) => (
-              <button key={`left-${symbol}`} className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10" type="button" onClick={() => insertSymbol(validatorInput1Ref, setValidatorInput1, symbol)}>
-                {symbol === '*' ? '★' : symbol}
+            {quickPickValues.map((value) => (
+              <button
+                key={`validate-${value}`}
+                className="rounded-full border border-[#b8ef39]/20 bg-[#b8ef39]/8 px-3 py-1.5 text-xs text-[#9ba072] transition hover:border-[#b8ef39]/45 hover:bg-[#b8ef39]/14 hover:text-[#b8ef39] [font-family:'Space_Mono',monospace]"
+                type="button"
+                onClick={() => applyQuickPick('validate', value)}
+              >
+                {value}
               </button>
             ))}
-            <span className="rounded-md border border-white/10 bg-[#b8ef39]/8 px-3 py-2 text-sm text-[#8a8a8a]">→ RE1</span>
-            {validatorPalette.map((symbol) => (
-              <button key={`right-${symbol}`} className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10" type="button" onClick={() => insertSymbol(validatorInput2Ref, setValidatorInput2, symbol)}>
-                {symbol === '*' ? '★' : symbol}
-              </button>
-            ))}
-            <span className="rounded-md border border-white/10 bg-[#b8ef39]/8 px-3 py-2 text-sm text-[#8a8a8a]">→ RE2</span>
           </div>
 
           {validatorError ? <div className="mb-4 rounded-lg border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 [font-family:'Space_Mono',monospace]">{validatorError}</div> : null}
@@ -467,11 +522,11 @@ function App() {
               </div>
               <div className="mx-auto max-w-2xl whitespace-pre-line text-sm leading-relaxed text-[#939393] [font-family:'Space_Mono',monospace]">
                 {validatorResult.equivalent
-                  ? `Both expressions ${validatorResult.left} and ${validatorResult.right} define the same language L(R1) = L(R2).`
+                  ? `${validatorResult.reason}\n\nBoth expressions ${validatorResult.left} and ${validatorResult.right} define the same language.`
                   : `The expressions define different languages.${
                       validatorResult.mismatch
                         ? `\n\nCounterexample: "${validatorResult.mismatch.string}" is ${validatorResult.mismatch.leftAccepted ? 'accepted' : 'rejected'} by RE1 but ${validatorResult.mismatch.rightAccepted ? 'accepted' : 'rejected'} by RE2.`
-                        : ''
+                        : `\n\n${validatorResult.reason}`
                     }`}
               </div>
             </div>
@@ -490,8 +545,28 @@ function App() {
 
           <div className="mb-4 flex flex-wrap gap-2">
             {visualizerPalette.map((symbol) => (
-              <button key={symbol} className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10" type="button" onClick={() => insertSymbol(visualizerInputRef, setVisualizerInput, symbol)}>
-                {symbol === '*' ? '★' : symbol === '+' ? '＋' : symbol}
+              <button
+                key={symbol}
+                className="rounded-md border border-white/10 bg-[#161616] px-3 py-2 text-base font-bold text-[#b8ef39] transition hover:border-[#b8ef39]/40 hover:bg-[#b8ef39]/10"
+                type="button"
+                onClick={() => insertSymbol(visualizerInputRef, setVisualizerInput, symbol)}
+                title={symbolTips[symbol]}
+              >
+                {symbol}
+              </button>
+            ))}
+          </div>
+
+          <p className="mb-2 text-[11px] uppercase tracking-[0.12em] text-[#878787] [font-family:'Space_Mono',monospace]">Quick Picks</p>
+          <div className="mb-5 flex flex-wrap gap-2">
+            {quickPickValues.map((value) => (
+              <button
+                key={`visualize-${value}`}
+                className="rounded-full border border-[#b8ef39]/20 bg-[#b8ef39]/8 px-3 py-1.5 text-xs text-[#9ba072] transition hover:border-[#b8ef39]/45 hover:bg-[#b8ef39]/14 hover:text-[#b8ef39] [font-family:'Space_Mono',monospace]"
+                type="button"
+                onClick={() => applyQuickPick('visualize', value)}
+              >
+                {value}
               </button>
             ))}
           </div>
