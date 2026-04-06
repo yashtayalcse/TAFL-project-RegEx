@@ -256,8 +256,8 @@ function App() {
             </h1>
           </div>
 
-          <div className="relative z-10 mx-auto mt-30 w-full max-w-[860px] md:mt-25">
-            <p className="mb-3 text-center text-base font-semibold tracking-[1px] text-[#b8ef39] md:text-[1.55rem]">MODULES</p>
+          <div className="relative z-10 mx-auto mt-35 w-full max-w-[860px] md:mt-30">
+            <p className="mb-6 text-center text-base font-semibold tracking-[1px] text-[#b8ef39] md:text-[1.55rem]">MODULES</p>
             <div className="grid rounded-xl border border-white/10 bg-[#202127] md:grid-cols-2">
               {modules.map((module, index) => (
                 <button
