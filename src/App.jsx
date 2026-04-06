@@ -208,7 +208,7 @@ function App() {
     <div className="relative min-h-screen overflow-x-hidden bg-[#070707] text-[#f0f0f0] [font-family:'Syne',sans-serif]">
       <div className="pointer-events-none fixed inset-0 z-50 opacity-35" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E\")" }} />
 
-      <nav className="fixed left-1/2 top-2 z-40 flex w-[min(1120px,calc(100%-20px))] -translate-x-1/2 items-center justify-between px-3 py-3 sm:px-5 md:px-10 md:py-4">
+      <nav className="fixed left-1/2 top-0 z-40 flex w-[min(1120px,calc(100%-20px))] -translate-x-1/2 items-center justify-between px-3 py-3 sm:px-5 md:px-10 md:py-4 bg-black">
         <button className="text-[1.6rem] font-extrabold leading-none tracking-[-1px] sm:text-[1.9rem] md:text-[2.1rem]" type="button" onClick={() => showSection('home')}>
           Reg<span className="text-[#b8ef39]">Ex</span>
         </button>
@@ -231,26 +231,25 @@ function App() {
         </button>
       </nav>
 
-      <section id="home" className={`${activeSection === 'home' ? 'flex' : 'hidden'} justify-center pb-3 pt-14 sm:pt-16`}>
-        <div className="relative min-h-[calc(100vh-22px)] w-full max-w-[1120px] overflow-hidden bg-[#050505] px-4 pb-8 pt-20 sm:px-5 sm:pb-9 sm:pt-24 md:px-[70px] md:pb-12 md:pt-24">
-          <div className="pointer-events-none absolute left-[8%] top-[17%] h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.35)_0%,rgba(165,231,60,0.05)_60%,transparent_100%)] blur-[50px]" />
-          <div className="pointer-events-none absolute bottom-[22%] left-1/2 h-[250px] w-[390px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_100%)] blur-[52px]" />
+      <section id="home" className={`${activeSection === 'home' ? 'flex' : 'hidden'} justify-center pb-5 pt-14 sm:pt-16`}>
+        <div className="relative min-h-[calc(100vh-22px)] w-full max-w-[1120px] overflow-hidden bg-[#050505] px-4 pb-5 pt-20 sm:px-5 sm:pb-5 sm:pt-24 md:px-[70px] md:pb-5 md:pt-24">
+          <div className="pointer-events-none absolute left-[1%] top-[0.25%] h-[450px] w-[450px] rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_70%)] blur-[30px]" />
+          {/* <div className="pointer-events-none absolute left-1/2 h-[400px] w-[490px] top-[-60%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_100%)] blur-[52px]" /> */}
 
           <div className="relative z-10 grid items-center gap-4 md:grid-cols-[320px_1fr] md:gap-12">
             <img src={nsutLogo} alt="NSUT Logo" className="mx-auto w-[165px] md:w-[245px]" />
-            <h1 className="text-center text-[2rem] font-bold leading-[1.15] tracking-[-0.4px] md:text-[3.15rem]">
-              TAFL Project Created
-              <br />
-              By
-              <br />
+            <h1 className="flex flex-col items-center gap-1 text-center text-[2rem] font-bold leading-none tracking-[-0.4px] md:gap-2 md:text-[2.7rem]">
+              <span>TAFL Project Created</span>
+              <span>By</span>
               <span className="text-[#b8ef39]">Yash Tayal</span>
-              <br />
-              <span className="text-[#b8ef39]">2024UCS1647</span>
+              <span className="inline-block leading-none tracking-[0.03em] text-[#b8ef39]">
+                2024UCS1647
+              </span>
             </h1>
           </div>
 
-          <div className="relative z-10 mx-auto mt-10 w-full max-w-[860px] md:mt-12">
-            <p className="mb-3 text-center text-base font-semibold tracking-[1px] text-[#b8ef39] md:text-[1.85rem]">MODULES</p>
+          <div className="relative z-10 mx-auto mt-30 w-full max-w-[860px] md:mt-25">
+            <p className="mb-3 text-center text-base font-semibold tracking-[1px] text-[#b8ef39] md:text-[1.55rem]">MODULES</p>
             <div className="grid rounded-xl border border-white/10 bg-[#202127] md:grid-cols-2">
               {modules.map((module, index) => (
                 <button
@@ -268,22 +267,43 @@ function App() {
             </div>
           </div>
 
-          <div className="relative z-10 mt-16 text-center md:mt-24">
+          <div className="relative z-10 mt-30 text-center md:mt-40">
             <h2 className="text-[2.4rem] font-bold leading-[1.04] tracking-[-0.7px] md:text-[4.9rem]">
               Explore
               <br />
               <em className="font-bold italic text-[#b8ef39]">Regular Expressions</em>
             </h2>
-            <span className="absolute right-1 top-7 text-4xl text-[#b8ef39]/65 md:right-[110px] md:top-8 md:text-[4.8rem]">✦</span>
+            <span className="absolute right-1 top-3 text-4xl text-[#b8ef39]/65 md:right-[100px] md:top-0 md:text-[5.2rem]">✦</span>
+
+            <div className="pointer-events-none absolute left-1/2 h-[400px] w-[490px] top-[-60%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_100%)] blur-[52px]" />
           </div>
 
-          <div className="relative z-10 mx-auto mt-12 flex w-full max-w-[760px] items-center gap-3 md:mt-20 md:gap-6">
-            <span className="flex-1 border-t-2 border-[#b8ef39]/70 text-center text-base leading-none text-[#b8ef39] md:text-[2.2rem]">←</span>
-            <span className="shrink-0 text-[0.62rem] tracking-[1px] text-[#b8ef39] md:text-[0.9rem]">HOW IT WORKS</span>
-            <span className="flex-1 border-t-2 border-[#b8ef39]/70 text-center text-base leading-none text-[#b8ef39] md:text-[2.2rem]">→</span>
+          <div className="relative z-10 mx-auto mt-40 flex w-full max-w-[760px] items-center justify-center gap-6">
+  
+            {/* LEFT SIDE: Line and Arrow */}
+            <div className="flex flex-1 items-center justify-end">
+              {/* CSS Arrowhead (Left) */}
+              <div className="w-2 h-2 border-t-2 border-l-2 border-[#b8ef39] rotate-[-45deg] translate-x-[1px]"></div>
+              {/* The Line */}
+              <div className="flex-1 h-[2px] bg-[#b8ef39]"></div>
+            </div>
+
+            {/* CENTER TEXT */}
+            <span className="relative shrink-0 bg-transparent px-4 text-[0.65rem] font-semibold tracking-[0.25em] text-[#b8ef39] md:text-[0.85rem] uppercase leading-none">
+              HOW IT WORKS
+            </span>
+
+            {/* RIGHT SIDE: Line and Arrow */}
+            <div className="flex flex-1 items-center justify-start">
+              {/* The Line */}
+              <div className="flex-1 h-[2px] bg-[#b8ef39]"></div>
+              {/* CSS Arrowhead (Right) */}
+              <div className="w-2 h-2 border-t-2 border-r-2 border-[#b8ef39] rotate-[45deg] translate-x-[-1px]"></div>
+            </div>
+            
           </div>
 
-          <div className="relative z-10 mx-auto mt-6 grid w-full max-w-[930px] gap-7 md:mt-9 md:grid-cols-3 md:gap-10">
+          <div className="relative z-10 mx-auto mt-6 grid w-full max-w-[930px] gap-7 md:mt-9 md:grid-cols-3 md:gap-10 ">
             {howItWorks.map((card) => (
               <div key={card.title} className="text-center">
                 <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-[#b8ef39] text-[1.6rem] font-bold text-black md:mb-4 md:h-[58px] md:w-[58px] md:text-[1.72rem]">{card.icon}</div>
