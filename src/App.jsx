@@ -33,11 +33,6 @@ const howItWorks = [
     description: 'Verify if two expressions define the same language using our built-in equivalence checker.',
     section: 'validate',
   },
-  // {
-  //   icon: '↻',
-  //   title: 'Generate Finite Automata',
-  //   description: 'Seamlessly convert your regular expression into its corresponding NFA or DFA.',
-  // },
 ];
 
 const paletteValues = ['a', 'b', '0', '1', '|', '*', '+', '(', ')', 'ε'];
