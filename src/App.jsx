@@ -263,7 +263,7 @@ function App() {
                 <button
                   key={module.title}
                   type="button"
-                  className={`flex min-h-[56px] items-center gap-3 px-4 py-2 text-left text-[1.05rem] font-medium text-white transition hover:bg-[#282c33] hover:text-[#b8ef39] md:min-h-[70px] md:px-8 md:text-[1.78rem] ${
+                  className={`flex min-h-[56px] items-center justify-center gap-3 px-4 py-2 text-left text-[1.05rem] font-medium text-white transition hover:bg-[#282c33] hover:text-[#b8ef39] md:min-h-[70px] md:px-8 md:text-[1.78rem] ${
                     index === 0 ? 'border-b border-white/10 md:border-b-0 md:border-r md:border-white/10' : ''
                   }`}
                   onClick={() => showSection(module.section)}

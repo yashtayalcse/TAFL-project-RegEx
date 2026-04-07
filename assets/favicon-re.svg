@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="RE favicon">
+  <rect width="64" height="64" rx="14" fill="#0a0a0a"/>
+  <text
+    x="32"
+    y="35"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-family="Syne, 'Segoe UI', sans-serif"
+    font-weight="800"
+    font-size="36"
+    letter-spacing="-0.8"
+    fill="#b8ef39"
+  >RE</text>
+</svg>
