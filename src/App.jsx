@@ -81,6 +81,7 @@ function App() {
   const [validatorInput2, setValidatorInput2] = useState('');
   const [validatorError, setValidatorError] = useState('');
   const [validatorResult, setValidatorResult] = useState(null);
+  const [playHeroTitleIntro, setPlayHeroTitleIntro] = useState(true);
 
   const generateInputRef = useRef(null);
   const validatorInput1Ref = useRef(null);
@@ -96,6 +97,16 @@ function App() {
     }
     window.scrollTo(0, 0);
   }, [location.pathname, navigate]);
+
+  useEffect(() => {
+    const introTimer = window.setTimeout(() => {
+      setPlayHeroTitleIntro(false);
+    }, 1900);
+
+    return () => {
+      window.clearTimeout(introTimer);
+    };
+  }, []);
 
   function showSection(section) {
     const route = sectionToRoute[section] || '/';
@@ -245,12 +256,12 @@ function App() {
         <div className="relative min-h-[calc(100vh-22px)] w-full max-w-[1120px] overflow-hidden bg-[#050505] px-4 pb-5 pt-20 sm:px-5 sm:pb-5 sm:pt-24 md:px-[70px] md:pb-5 md:pt-24">
 
           <div className="relative z-10 grid items-center gap-4 md:grid-cols-[320px_1fr] md:gap-12">
-            <img src={nsutLogo} alt="NSUT Logo" className="mx-auto w-[165px] md:w-[245px]" />
-            <h1 className="flex flex-col items-center gap-1 text-center text-[2rem] font-bold leading-none tracking-[-0.4px] md:gap-2 md:text-[2.7rem]">
-              <span>TAFL Project Created</span>
-              <span>By</span>
-              <span className="text-[#b8ef39]">Yash Tayal</span>
-              <span className="inline-block leading-none tracking-[0.03em] text-[#b8ef39]">
+            <img src={nsutLogo} alt="NSUT Logo" className="landing-logo-float mx-auto w-[165px] md:w-[245px]" />
+            <h1 className={`${playHeroTitleIntro ? 'hero-title-reveal' : ''} flex flex-col items-center gap-1 text-center text-[2rem] font-bold leading-none tracking-[-0.4px] md:gap-2 md:text-[2.7rem]`}>
+              <span className="hero-title-line">TAFL Project Created</span>
+              <span className="hero-title-line">By</span>
+              <span className="hero-title-line text-[#b8ef39]">Yash Tayal</span>
+              <span className="hero-title-line inline-block leading-none tracking-[0.03em] text-[#b8ef39]">
                 2024UCS1647
               </span>
             </h1>
