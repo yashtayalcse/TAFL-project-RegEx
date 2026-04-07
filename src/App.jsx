@@ -259,12 +259,30 @@ function App() {
 
       <nav className="fixed left-1/2 top-0 z-40 flex w-[min(1120px,calc(100%-20px))] -translate-x-1/2 items-center justify-between px-3 py-3 sm:px-5 md:px-10 md:py-4 bg-black">
         <button
-          className="text-[1.6rem] font-extrabold leading-none tracking-[-1px] transition-transform duration-200 hover:scale-[1.04] active:scale-[0.97] sm:text-[1.9rem] md:text-[2.1rem]"
+          className="text-[1.3rem] font-extrabold leading-none tracking-[-1px] transition-transform duration-200 hover:scale-[1.04] active:scale-[0.97] sm:text-[1.6rem] md:text-[2.1rem]"
           type="button"
           onClick={() => showSection('home')}
         >
           Reg<span className="text-[#b8ef39]">Ex</span>
         </button>
+        <div className="md:hidden flex items-center gap-3">
+          <button
+            className={`rounded-md px-2 py-1.5 text-[1.2rem] font-bold transition-colors duration-200 ${activeSection === 'generate' ? 'text-[#b8ef39]' : 'text-white'}`}
+            type="button"
+            onClick={() => showSection('generate')}
+            title="String Generator"
+          >
+            ✎
+          </button>
+          <button
+            className={`rounded-md px-2 py-1.5 text-[1.2rem] font-bold transition-colors duration-200 ${activeSection === 'validate' ? 'text-[#b8ef39]' : 'text-white'}`}
+            type="button"
+            onClick={() => showSection('validate')}
+            title="Equivalence Checker"
+          >
+            ⚖
+          </button>
+        </div>
         <div className="hidden items-center gap-5 md:flex">
           <button
             className={`rounded-md px-1 py-1 text-[0.98rem] font-semibold transition-all duration-200 hover:scale-[1.08] active:scale-95 ${activeSection === 'home' ? 'text-[#b8ef39]' : 'text-white'}`}
@@ -339,7 +357,7 @@ function App() {
             </h2>
             <span className="absolute right-1 top-3 text-4xl text-[#b8ef39]/65 md:right-[100px] md:top-0 md:text-[5.2rem]">✦</span>
 
-            <div className="pointer-events-none absolute left-1/2 h-[400px] w-[490px] top-[-60%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_100%)] blur-[52px]" />
+            <div className="pointer-events-none absolute left-1/2 h-[400px] w-[490px]  top-[-60%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_100%)] blur-[52px]" />
           </div>
 
           <div className="home-scroll-reveal relative z-10 mx-auto mt-40 flex w-full max-w-[760px] items-center justify-center gap-6" style={{ '--reveal-delay': '90ms' }}>
@@ -389,7 +407,7 @@ function App() {
       <section id="generate" className={`${activeSection === 'generate' ? 'flex' : 'hidden'} min-h-screen px-2.5 pb-12 pt-24 sm:px-3 sm:pb-16 sm:pt-28 md:px-8`}>
         <div className="mx-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5 md:p-10">
           <div className="mb-8">
-            <h2 className="text-4xl font-extrabold tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
               String <span className="text-[#b8ef39]">Generator</span>
             </h2>
             <p className="mt-2 text-xs text-[#7f7f7f] [font-family:'Space_Mono',monospace]">// Enter a regular expression and generate accepted strings in increasing order of length</p>
@@ -481,7 +499,7 @@ function App() {
       <section id="validate" className={`${activeSection === 'validate' ? 'flex' : 'hidden'} min-h-screen px-2.5 pb-12 pt-24 sm:px-3 sm:pb-16 sm:pt-28 md:px-8`}>
         <div className="mx-auto w-full max-w-5xl rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5 md:p-10">
           <div className="mb-8">
-            <h2 className="text-4xl font-extrabold tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
               Equivalence <span className="text-[#b8ef39]">Checker</span>
             </h2>
             <p className="mt-2 text-xs text-[#7f7f7f] [font-family:'Space_Mono',monospace]">// Compare two regular expressions to check if they define the same language</p>
