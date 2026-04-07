@@ -87,6 +87,7 @@ function App() {
   const validatorInput1Ref = useRef(null);
   const validatorInput2Ref = useRef(null);
   const validatorFocusRef = useRef('left');
+  const homeSectionRef = useRef(null);
 
   const pageSize = 15;
 
@@ -107,6 +108,50 @@ function App() {
       window.clearTimeout(introTimer);
     };
   }, []);
+
+  useEffect(() => {
+    if (activeSection !== 'home' || !homeSectionRef.current) {
+      return undefined;
+    }
+
+    // Reset all reveal states when entering home page
+    const allRevealNodes = homeSectionRef.current.querySelectorAll('.home-scroll-reveal');
+    allRevealNodes.forEach((node) => {
+      node.classList.remove('is-visible');
+    });
+
+    // Small delay to ensure DOM reflects the class removal before observer starts
+    const setupTimer = window.setTimeout(() => {
+      const revealNodes = homeSectionRef.current?.querySelectorAll('.home-scroll-reveal');
+      if (!revealNodes || revealNodes.length === 0) {
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.16,
+          rootMargin: '0px 0px -12% 0px',
+        },
+      );
+
+      revealNodes.forEach((node) => observer.observe(node));
+
+      return () => {
+        observer.disconnect();
+      };
+    }, 0);
+
+    return () => {
+      window.clearTimeout(setupTimer);
+    };
+  }, [activeSection]);
 
   function showSection(section) {
     const route = sectionToRoute[section] || '/';
@@ -252,7 +297,7 @@ function App() {
         </button>
       </nav>
 
-      <section id="home" className={`${activeSection === 'home' ? 'flex' : 'hidden'} justify-center pb-5 pt-14 sm:pt-16`}>
+      <section id="home" ref={homeSectionRef} className={`${activeSection === 'home' ? 'flex' : 'hidden'} justify-center pb-5 pt-14 sm:pt-16`}>
         <div className="relative min-h-[calc(100vh-22px)] w-full max-w-[1120px] overflow-hidden bg-[#050505] px-4 pb-5 pt-20 sm:px-5 sm:pb-5 sm:pt-24 md:px-[70px] md:pb-5 md:pt-24">
 
           <div className="relative z-10 grid items-center gap-4 md:grid-cols-[320px_1fr] md:gap-12">
@@ -286,7 +331,7 @@ function App() {
             </div>
           </div>
 
-          <div className="relative z-10 mt-30 text-center md:mt-40">
+          <div className="home-scroll-reveal relative z-10 mt-30 text-center md:mt-40">
             <h2 className="text-[2.4rem] font-bold leading-[1.04] tracking-[-0.7px] md:text-[4.9rem]">
               Explore
               <br />
@@ -297,7 +342,7 @@ function App() {
             <div className="pointer-events-none absolute left-1/2 h-[400px] w-[490px] top-[-60%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(165,231,60,0.38)_0%,rgba(165,231,60,0.05)_58%,transparent_100%)] blur-[52px]" />
           </div>
 
-          <div className="relative z-10 mx-auto mt-40 flex w-full max-w-[760px] items-center justify-center gap-6">
+          <div className="home-scroll-reveal relative z-10 mx-auto mt-40 flex w-full max-w-[760px] items-center justify-center gap-6" style={{ '--reveal-delay': '90ms' }}>
   
             {/* LEFT SIDE: Line and Arrow */}
             <div className="flex flex-1 items-center justify-end">
@@ -322,9 +367,9 @@ function App() {
             
           </div>
 
-          <div className="relative z-10 mx-auto mt-6 grid w-full max-w-[760px] gap-7 md:mt-9 md:grid-cols-2 md:gap-10 ">
-            {howItWorks.map((card) => (
-              <div key={card.title} className="text-center">
+          <div className="home-scroll-reveal relative z-10 mx-auto mt-6 grid w-full max-w-[760px] gap-7 md:mt-9 md:grid-cols-2 md:gap-10" style={{ '--reveal-delay': '150ms' }}>
+            {howItWorks.map((card, index) => (
+              <div key={card.title} className="home-scroll-reveal text-center" style={{ '--reveal-delay': `${260 + (index * 110)}ms` }}>
                 <button
                   className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-[#b8ef39] text-[1.6rem] font-bold text-black transition-transform duration-200 hover:scale-110 active:scale-95 md:mb-4 md:h-[58px] md:w-[58px] md:text-[1.72rem]"
                   type="button"
